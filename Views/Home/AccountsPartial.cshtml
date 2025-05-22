@@ -1,0 +1,28 @@
+﻿@using GoruntuluGorusmeBitirme.Database
+
+@{ 
+    ACCOUNT LOGIN_USER = (ACCOUNT)Session["LOGIN_USER"];
+    int USER_ID = int.Parse(Request["USER_ID"] ?? "0");
+}
+
+@model List<ACCOUNT>
+
+<div class="card-body contacts_body">
+    <ul class="contacts">
+        @foreach (ACCOUNT acc in Model)
+        {
+            MESSAGE msg = acc.MESSAGE.Where(p => p.ACCOUNT.USER_ID == acc.USER_ID && p.ACCOUNT1.USER_ID == LOGIN_USER.USER_ID).Union(acc.MESSAGE1.Where(p => p.ACCOUNT.USER_ID == LOGIN_USER.USER_ID && p.ACCOUNT1.USER_ID == acc.USER_ID)).OrderByDescending(p => p.MESSAGE_DATE).FirstOrDefault();
+            <li class="@(USER_ID == acc.USER_ID ? "active" : "" ) " onclick="location.href = '/Home/Index?USER_ID=@acc.USER_ID';">
+                <div class="d-flex bd-highlight">
+                    <div class="img_cont">
+                        <img src="@acc.IMAGE" class="rounded-circle user_img">
+                    </div>
+                    <div class="user_info">
+                        <span>@acc.NAME_SURNAME</span>
+                        <p>@(msg == null ? "Sohbete başlayın" : ( msg.ACCOUNT1.USER_ID == LOGIN_USER.USER_ID ? "Siz: " : msg.ACCOUNT1.NAME_SURNAME +": ") + msg.MESSAGE_CONTENT)</p>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<GoruntuluGorusmeBitirme.Database.CHAT_LOG>
+
+
+<h2>Chat Log Listesi</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Gönderen ID</th>
+            <th>Alıcı ID</th>
+            <th>İçerik</th>
+            <th>Tarih</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.SENDER_ID</td>
+            <td>@item.RECEIVER_ID</td>
+            <td>@item.MESSAGE_CONTENT</td>
+            <td>@item.SENT_TIME</td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "Kayıt Ol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="~/Content/css/style.css">
+<div class="container">
+    <div class="row justify-content-center" style="margin-top:150px">
+        <div class="col-md-6 col-lg-4">
+            <div class="login-wrap py-5">
+                <div class="img d-flex align-items-center justify-content-center" style="background-image: url(/Content/images/bg.jpg);"></div>
+                <h3 class="text-center mb-0">Hoşgeldiniz</h3>
+                <p class="text-center">Kayıt olmak için bilgilerinizi giriniz</p>
+                <form action="/Auth/Register" method="post" class="login-form">
+                    <div class="form-group">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-user"></span></div>
+                        <input type="text" class="form-control" name="EMAIL" placeholder="E-Posta" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-info"></span></div>
+                        <input type="text" class="form-control" name="NAME_SURNAME" placeholder="Ad Soyad" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-image"></span></div>
+                        <input type="text" class="form-control" name="IMAGE" placeholder="Profil Resmi URL" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
+                        <input type="password" class="form-control" name="PASSWORD" placeholder="Şifre" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn form-control btn-primary rounded submit px-3">Kayıt Ol</button>
+                    </div>
+                </form>
+                <div class="w-100 text-center mt-4 text">
+                    <p class="mb-0">Hesabın var mı?</p>
+                    <a href="/Auth/Index">Giriş Yap</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/js/jquery.min.js"></script>
+<script src="~/Content/js/popper.js"></script>
+<script src="~/Content/js/bootstrap.min.js"></script>
+<script src="~/Content/js/main.js"></script>

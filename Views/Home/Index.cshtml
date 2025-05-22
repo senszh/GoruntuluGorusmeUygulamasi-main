@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using GoruntuluGorusmeBitirme.Database
+
+@{
+    ACCOUNT LOGIN_USER = (ACCOUNT)Session["LOGIN_USER"];
+    ACCOUNT USER = ViewBag.USER;
+}
+
+<div class="row justify-content-center h-100">
+    <div class="col-md-4 col-xl-3 chat">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+            <div class="card-header">
+                <div class="d-flex bd-highlight">
+                    <div class="img_cont">
+                        <img src="@LOGIN_USER.IMAGE" class="rounded-circle user_img">
+                        <span class="online_icon"></span>
+                    </div>
+                    <div class="user_info">
+                        <span>@LOGIN_USER.NAME_SURNAME</span>
+                    </div>
+                    <span id="action_menu_btn" onclick="$('.action_menu').toggle();"><i class="fas fa-ellipsis-v"></i></span>
+                    <div class="action_menu">
+                        <ul>
+                            <li><i class="fas fa-user-circle"></i> Profil Resmi Değiştir</li>
+                            <li><i class="fas fa-key"></i> Şifreni Değiştir</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @{
+                Html.RenderAction("AccountsPartial", "Home");
+            }
+            <div class="card-footer"></div>
+        </div>
+    </div>
+    <div class="col-md-8 col-xl-6 chat chatDetail">
+        @{
+            Html.RenderAction("MessageDetailPartial", "Home", new { USER = USER });
+        }
+    </div>
+</div>

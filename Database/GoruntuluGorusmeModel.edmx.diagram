@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="df5283915faf461f8c1e94b95f69ac35" Name="Diagram1">
+        <EntityTypeShape EntityType="GoruntuluGorusmeModel.ACCOUNT" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="GoruntuluGorusmeModel.MESSAGE" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="GoruntuluGorusmeModel.sysdiagrams" Width="1.5" PointX="0.625" PointY="4.25" IsExpanded="true" />
+        <AssociationConnector Association="GoruntuluGorusmeModel.FK_MESSAGE_ACCOUNT_RECEIVER" ManuallyRouted="false" />
+        <AssociationConnector Association="GoruntuluGorusmeModel.FK_MESSAGE_ACCOUNT_SENDER" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="GoruntuluGorusmeModel.CHAT_LOG" Width="1.5" PointX="3" PointY="4.25" />
+        <AssociationConnector Association="GoruntuluGorusmeModel.FK__CHAT_LOG__RECEIV__47DBAE45" />
+        <AssociationConnector Association="GoruntuluGorusmeModel.FK__CHAT_LOG__SENDER__46E78A0C" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

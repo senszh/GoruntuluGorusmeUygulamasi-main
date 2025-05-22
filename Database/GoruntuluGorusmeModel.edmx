@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GoruntuluGorusmeModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ACCOUNT">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+          </Key>
+          <Property Name="USER_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME_SURNAME" Type="varchar" MaxLength="250" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="250" />
+          <Property Name="PASS" Type="varchar" MaxLength="255" />
+          <Property Name="IMAGE" Type="varchar" MaxLength="255" />
+          <Property Name="HUB_ID" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CHAT_LOG">
+          <Key>
+            <PropertyRef Name="CHAT_ID" />
+          </Key>
+          <Property Name="CHAT_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SENDER_ID" Type="int" />
+          <Property Name="RECEIVER_ID" Type="int" />
+          <Property Name="MESSAGE_CONTENT" Type="nvarchar(max)" />
+          <Property Name="SENT_TIME" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MESSAGE">
+          <Key>
+            <PropertyRef Name="MESSAGE_ID" />
+          </Key>
+          <Property Name="MESSAGE_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MESSAGE_SENDER" Type="int" />
+          <Property Name="MESSAGE_RECEIVER" Type="int" />
+          <Property Name="MESSAGE_CONTENT" Type="varchar" MaxLength="255" />
+          <Property Name="MESSAGE_DATE" Type="datetime" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK__CHAT_LOG__RECEIV__47DBAE45">
+          <End Role="ACCOUNT" Type="Self.ACCOUNT" Multiplicity="0..1" />
+          <End Role="CHAT_LOG" Type="Self.CHAT_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="CHAT_LOG">
+              <PropertyRef Name="RECEIVER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CHAT_LOG__SENDER__46E78A0C">
+          <End Role="ACCOUNT" Type="Self.ACCOUNT" Multiplicity="0..1" />
+          <End Role="CHAT_LOG" Type="Self.CHAT_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="CHAT_LOG">
+              <PropertyRef Name="SENDER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MESSAGE_ACCOUNT_RECEIVER">
+          <End Role="ACCOUNT" Type="Self.ACCOUNT" Multiplicity="0..1" />
+          <End Role="MESSAGE" Type="Self.MESSAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="MESSAGE">
+              <PropertyRef Name="MESSAGE_RECEIVER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MESSAGE_ACCOUNT_SENDER">
+          <End Role="ACCOUNT" Type="Self.ACCOUNT" Multiplicity="0..1" />
+          <End Role="MESSAGE" Type="Self.MESSAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="MESSAGE">
+              <PropertyRef Name="MESSAGE_SENDER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GoruntuluGorusmeModelStoreContainer">
+          <EntitySet Name="ACCOUNT" EntityType="Self.ACCOUNT" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CHAT_LOG" EntityType="Self.CHAT_LOG" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MESSAGE" EntityType="Self.MESSAGE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CHAT_LOG__RECEIV__47DBAE45" Association="Self.FK__CHAT_LOG__RECEIV__47DBAE45">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="CHAT_LOG" EntitySet="CHAT_LOG" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CHAT_LOG__SENDER__46E78A0C" Association="Self.FK__CHAT_LOG__SENDER__46E78A0C">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="CHAT_LOG" EntitySet="CHAT_LOG" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MESSAGE_ACCOUNT_RECEIVER" Association="Self.FK_MESSAGE_ACCOUNT_RECEIVER">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="MESSAGE" EntitySet="MESSAGE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MESSAGE_ACCOUNT_SENDER" Association="Self.FK_MESSAGE_ACCOUNT_SENDER">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="MESSAGE" EntitySet="MESSAGE" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GoruntuluGorusmeModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ACCOUNT">
+          <Key>
+            <PropertyRef Name="USER_ID" />
+          </Key>
+          <Property Name="USER_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME_SURNAME" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PASS" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IMAGE" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="MESSAGE" Relationship="Self.FK_MESSAGE_ACCOUNT_RECEIVER" FromRole="ACCOUNT" ToRole="MESSAGE" />
+          <NavigationProperty Name="MESSAGE1" Relationship="Self.FK_MESSAGE_ACCOUNT_SENDER" FromRole="ACCOUNT" ToRole="MESSAGE" />
+          <Property Name="HUB_ID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="CHAT_LOG" Relationship="GoruntuluGorusmeModel.FK__CHAT_LOG__RECEIV__47DBAE45" FromRole="ACCOUNT" ToRole="CHAT_LOG" />
+          <NavigationProperty Name="CHAT_LOG1" Relationship="GoruntuluGorusmeModel.FK__CHAT_LOG__SENDER__46E78A0C" FromRole="ACCOUNT" ToRole="CHAT_LOG" />
+        </EntityType>
+        <EntityType Name="MESSAGE">
+          <Key>
+            <PropertyRef Name="MESSAGE_ID" />
+          </Key>
+          <Property Name="MESSAGE_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MESSAGE_SENDER" Type="Int32" />
+          <Property Name="MESSAGE_RECEIVER" Type="Int32" />
+          <Property Name="MESSAGE_CONTENT" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MESSAGE_DATE" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ACCOUNT" Relationship="Self.FK_MESSAGE_ACCOUNT_RECEIVER" FromRole="MESSAGE" ToRole="ACCOUNT" />
+          <NavigationProperty Name="ACCOUNT1" Relationship="Self.FK_MESSAGE_ACCOUNT_SENDER" FromRole="MESSAGE" ToRole="ACCOUNT" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_MESSAGE_ACCOUNT_RECEIVER">
+          <End Role="ACCOUNT" Type="Self.ACCOUNT" Multiplicity="0..1" />
+          <End Role="MESSAGE" Type="Self.MESSAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="MESSAGE">
+              <PropertyRef Name="MESSAGE_RECEIVER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MESSAGE_ACCOUNT_SENDER">
+          <End Role="ACCOUNT" Type="Self.ACCOUNT" Multiplicity="0..1" />
+          <End Role="MESSAGE" Type="Self.MESSAGE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="MESSAGE">
+              <PropertyRef Name="MESSAGE_SENDER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GoruntuluGorusmeEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ACCOUNT" EntityType="Self.ACCOUNT" />
+          <EntitySet Name="MESSAGE" EntityType="Self.MESSAGE" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <AssociationSet Name="FK_MESSAGE_ACCOUNT_RECEIVER" Association="Self.FK_MESSAGE_ACCOUNT_RECEIVER">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="MESSAGE" EntitySet="MESSAGE" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MESSAGE_ACCOUNT_SENDER" Association="Self.FK_MESSAGE_ACCOUNT_SENDER">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="MESSAGE" EntitySet="MESSAGE" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(GoruntuluGorusmeModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(GoruntuluGorusmeModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="CHAT_LOG" EntityType="GoruntuluGorusmeModel.CHAT_LOG" />
+          <AssociationSet Name="FK__CHAT_LOG__RECEIV__47DBAE45" Association="GoruntuluGorusmeModel.FK__CHAT_LOG__RECEIV__47DBAE45">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="CHAT_LOG" EntitySet="CHAT_LOG" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CHAT_LOG__SENDER__46E78A0C" Association="GoruntuluGorusmeModel.FK__CHAT_LOG__SENDER__46E78A0C">
+            <End Role="ACCOUNT" EntitySet="ACCOUNT" />
+            <End Role="CHAT_LOG" EntitySet="CHAT_LOG" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="CHAT_LOG">
+          <Key>
+            <PropertyRef Name="CHAT_ID" />
+          </Key>
+          <Property Name="CHAT_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SENDER_ID" Type="Int32" />
+          <Property Name="RECEIVER_ID" Type="Int32" />
+          <Property Name="MESSAGE_CONTENT" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SENT_TIME" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ACCOUNT" Relationship="GoruntuluGorusmeModel.FK__CHAT_LOG__RECEIV__47DBAE45" FromRole="CHAT_LOG" ToRole="ACCOUNT" />
+          <NavigationProperty Name="ACCOUNT1" Relationship="GoruntuluGorusmeModel.FK__CHAT_LOG__SENDER__46E78A0C" FromRole="CHAT_LOG" ToRole="ACCOUNT" />
+        </EntityType>
+        <Association Name="FK__CHAT_LOG__RECEIV__47DBAE45">
+          <End Type="GoruntuluGorusmeModel.ACCOUNT" Role="ACCOUNT" Multiplicity="0..1" />
+          <End Type="GoruntuluGorusmeModel.CHAT_LOG" Role="CHAT_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="CHAT_LOG">
+              <PropertyRef Name="RECEIVER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CHAT_LOG__SENDER__46E78A0C">
+          <End Type="GoruntuluGorusmeModel.ACCOUNT" Role="ACCOUNT" Multiplicity="0..1" />
+          <End Type="GoruntuluGorusmeModel.CHAT_LOG" Role="CHAT_LOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ACCOUNT">
+              <PropertyRef Name="USER_ID" />
+            </Principal>
+            <Dependent Role="CHAT_LOG">
+              <PropertyRef Name="SENDER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GoruntuluGorusmeModelStoreContainer" CdmEntityContainer="GoruntuluGorusmeEntities">
+    <EntitySetMapping Name="ACCOUNT">
+      <EntityTypeMapping TypeName="IsTypeOf(GoruntuluGorusmeModel.ACCOUNT)">
+        <MappingFragment StoreEntitySet="ACCOUNT">
+          <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+          <ScalarProperty Name="NAME_SURNAME" ColumnName="NAME_SURNAME" />
+          <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+          <ScalarProperty Name="PASS" ColumnName="PASS" />
+          <ScalarProperty Name="IMAGE" ColumnName="IMAGE" />
+          <ScalarProperty Name="HUB_ID" ColumnName="HUB_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MESSAGE">
+      <EntityTypeMapping TypeName="IsTypeOf(GoruntuluGorusmeModel.MESSAGE)">
+        <MappingFragment StoreEntitySet="MESSAGE">
+          <ScalarProperty Name="MESSAGE_ID" ColumnName="MESSAGE_ID" />
+          <ScalarProperty Name="MESSAGE_SENDER" ColumnName="MESSAGE_SENDER" />
+          <ScalarProperty Name="MESSAGE_RECEIVER" ColumnName="MESSAGE_RECEIVER" />
+          <ScalarProperty Name="MESSAGE_CONTENT" ColumnName="MESSAGE_CONTENT" />
+          <ScalarProperty Name="MESSAGE_DATE" ColumnName="MESSAGE_DATE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="IsTypeOf(GoruntuluGorusmeModel.sysdiagrams)">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+          <EntitySetMapping Name="CHAT_LOG">
+            <EntityTypeMapping TypeName="GoruntuluGorusmeModel.CHAT_LOG">
+              <MappingFragment StoreEntitySet="CHAT_LOG">
+                <ScalarProperty Name="SENT_TIME" ColumnName="SENT_TIME" />
+                <ScalarProperty Name="MESSAGE_CONTENT" ColumnName="MESSAGE_CONTENT" />
+                <ScalarProperty Name="RECEIVER_ID" ColumnName="RECEIVER_ID" />
+                <ScalarProperty Name="SENDER_ID" ColumnName="SENDER_ID" />
+                <ScalarProperty Name="CHAT_ID" ColumnName="CHAT_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
