@@ -12,6 +12,7 @@
 @if (USER.USER_ID != 0)
 {
     <div class="card">
+        <input type="hidden" id="currentUserId" value="@LOGIN_USER.USER_ID" />
         <div class="card-header msg_head">
             <div class="d-flex bd-highlight">
                 <div class="img_cont">
@@ -31,27 +32,27 @@
                 ACCOUNT SENDER_USER = msg.ACCOUNT1;
                 if (SENDER_USER.USER_ID == LOGIN_USER.USER_ID)
                 {
-                    <div class="d-flex justify-content-start mb-4">
-                        <div class="img_cont_msg">
-                            <img src="@LOGIN_USER.IMAGE" class="rounded-circle user_img_msg">
-                        </div>
-                        <div class="msg_cotainer" style="min-width:150px">
-                            @msg.MESSAGE_CONTENT
-                            <span class="msg_time">@(msg.MESSAGE_DATE.Value.ToShortDateString() + " " + msg.MESSAGE_DATE.Value.ToShortTimeString())</span>
-                        </div>
-                    </div>
+            <div class="d-flex justify-content-start mb-4">
+                <div class="img_cont_msg">
+                    <img src="@LOGIN_USER.IMAGE" class="rounded-circle user_img_msg">
+                </div>
+                <div class="msg_cotainer" style="min-width:150px">
+                    @msg.MESSAGE_CONTENT
+                    <span class="msg_time">@(msg.MESSAGE_DATE.Value.ToShortDateString() + " " + msg.MESSAGE_DATE.Value.ToShortTimeString())</span>
+                </div>
+            </div>
                 }
                 else
                 {
-                    <div class="d-flex justify-content-end mb-4">
-                        <div class="msg_cotainer_send" style="min-width:150px">
-                            @msg.MESSAGE_CONTENT
-                            <span class="msg_time_send">@(msg.MESSAGE_DATE.Value.ToShortDateString() + " " + msg.MESSAGE_DATE.Value.ToShortTimeString())</span>
-                        </div>
-                        <div class="img_cont_msg">
-                            <img src="@USER.IMAGE" class="rounded-circle user_img_msg">
-                        </div>
-                    </div>
+            <div class="d-flex justify-content-end mb-4">
+                <div class="msg_cotainer_send" style="min-width:150px">
+                    @msg.MESSAGE_CONTENT
+                    <span class="msg_time_send">@(msg.MESSAGE_DATE.Value.ToShortDateString() + " " + msg.MESSAGE_DATE.Value.ToShortTimeString())</span>
+                </div>
+                <div class="img_cont_msg">
+                    <img src="@USER.IMAGE" class="rounded-circle user_img_msg">
+                </div>
+            </div>
                 }
             } }
 
@@ -109,6 +110,7 @@
     }
 
     function setCamera() {
+        console.log("setCamera fonksiyonu çağrıldı");
         var camHtml = '<video muted id="cam2" autoplay playsinline style="width: 500px; height:400px"></video>' +
             '<video muted id = "cam1" autoplay playsinline style = "width: 500px; height: 400px" ></video>' +
             '<button type="button" class="btn btn-danger col-12" id="createRoom" onclick="joinRoom(@LOGIN_USER.USER_ID, @USER.USER_ID)">Görüşmeyi Başlatın</button>';
@@ -307,15 +309,16 @@
     }
 
     function endCall() {
+        console.log("endCall fonksiyonu çağrıldı");
         if (typeof recognition !== "undefined" && recognition) {
             recognition.stop();
+            console.log("Speech recognition stopped");
         }
-        stopAllStreams();
+        stopAllStreams && stopAllStreams();
         $("#endCallBtn").prop("disabled", true);
 
         try {
             if (hub && hub.server && typeof hub.server.EndCall === "function") {
-                // SignalR çağrısı
                 var endCallResult = hub.server.EndCall('@LOGIN_USER.USER_ID', '@USER.USER_ID');
                 if (endCallResult && typeof endCallResult.fail === "function") {
                     endCallResult.fail(function (error) {
@@ -327,6 +330,7 @@
                         $("#endCallBtn").prop("disabled", false);
                     });
                 }
+                console.log("hub.server.EndCall çağrıldı");
             } else {
                 console.error("hub.server.EndCall fonksiyonu bulunamadı.");
                 $.alert({
@@ -351,10 +355,12 @@
     }
 
     hub.client.onCallEnded = function () {
+        console.log("onCallEnded client fonksiyonu tetiklendi");
         if (typeof recognition !== "undefined" && recognition) {
             recognition.stop();
+            console.log("Speech recognition stopped (onCallEnded)");
         }
-        stopAllStreams();
+        stopAllStreams && stopAllStreams();
         $("#endCallBtn").prop("disabled", true);
         $.alert({
             title: 'Görüşme Sonlandırıldı',

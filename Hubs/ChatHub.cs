@@ -1,32 +1,61 @@
-using GoruntuluGorusmeBitirme.Database;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNet.SignalR;
+using GoruntuluGorusmeBitirme.Database; // Kendi EF namespace’in
 
-public class ChatHub : Microsoft.AspNet.SignalR.Hub
+public class ChatHub : Hub
 {
-    public void SaveTranscript(int userId, string message)
+    private static readonly Dictionary<int, string> _connections = new Dictionary<int, string>();
+
+    public override Task OnConnected()
     {
-        System.Diagnostics.Debug.WriteLine("SaveTranscript çaðrýldý: " + userId + " - " + message);
-      
-        using (var db = new GoruntuluGorusmeEntities())
+        int userId = 0;
+        var userIdStr = Context.QueryString.Get("userId");
+        if (!string.IsNullOrEmpty(userIdStr))
+            int.TryParse(userIdStr, out userId);
+
+        if (userId != 0)
+            _connections[userId] = Context.ConnectionId;
+
+        return base.OnConnected();
+    }
+
+    public override Task OnDisconnected(bool stopCalled)
+    {
+        var pair = _connections.FirstOrDefault(x => x.Value == Context.ConnectionId);
+        if (pair.Key != 0)
+            _connections.Remove(pair.Key);
+        return base.OnDisconnected(stopCalled);
+    }
+
+    public async Task SaveTranscript(int userId, string transcript)
+    {
+        using (var db = new GoruntuluGorusmeEntities()) // senin DbContext adýnla deðiþtir
         {
             var log = new CHAT_LOG
             {
                 SENDER_ID = userId,
-                MESSAGE_CONTENT = message, // <-- Mesaj içeriði alaný
-                SENT_TIME = DateTime.Now  // <-- Kayýt zamaný alaný
+                MESSAGE_CONTENT = transcript,
+                SENT_TIME = DateTime.Now
             };
             db.CHAT_LOG.Add(log);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
+
+        await Clients.Caller.transcriptSaved();
     }
 
-    // SignalR method to end the call and notify both users
-    public void EndCall(int senderUserId, int receiverUserId)
+    public Task EndCall(int senderId, int receiverId)
     {
-        // Gerekirse burada ek temizlik iþlemleri yapýlabilir
+        if (_connections.TryGetValue(senderId, out var senderConn))
+            Clients.Client(senderConn).onCallEnded();
+        if (_connections.TryGetValue(receiverId, out var receiverConn))
+            Clients.Client(receiverConn).onCallEnded();
 
-        // Her iki kullanýcýya da görüþmenin sonlandýðýný bildir
-        Clients.User(senderUserId.ToString()).onCallEnded();
-        Clients.User(receiverUserId.ToString()).onCallEnded();
+        return Task.CompletedTask;
     }
+
+    // Diðer mevcut metodlarýn (videoCallRequest vb.) olduðu yer
 }

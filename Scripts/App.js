@@ -22,6 +22,9 @@ RB.WebRtc = (function (connectionManager) {
 
         _connect = function (hub, RECEIVER_USER, SENDER_USER) {
             console.info("SIGNALR: connect()!");
+            // Sayfa yüklendiğinde SignalR bağlantı sorgusuna kullanıcı ID'si ekle
+            var currentUserId = $("#currentUserId").val();
+            $.connection.hub.qs = { userId: currentUserId };
             _hub().setHub(hub);
             $.connection.hub.start()
                 .done(function () {
@@ -81,7 +84,9 @@ RB.WebRtc = (function (connectionManager) {
                 _camOpen = function () {
                     console.info("UI: Cam Open(" + _user().getUsername() + ")");
                     document.getElementById("camOpen").onclick = function () {
+                        console.log("camOpen button clicked");
                         if (_mediaStream != null) {
+                            console.log("Video track enabled");
                             _videoTrack.enabled = true;
                         } else {
                             if (navigator.mediaDevices.getUserMedia) {
@@ -89,10 +94,12 @@ RB.WebRtc = (function (connectionManager) {
                                 var selectedAudioValue = selectAudioBox.options[selectAudioBox.selectedIndex].value;
                                 var selectVideoBox = document.getElementById("cameras");
                                 var selectedVideoValue = selectVideoBox.options[selectVideoBox.selectedIndex].value;
+                                console.log("Requesting user media with audio:", selectedAudioValue, "video:", selectedVideoValue);
                                 navigator.mediaDevices.getUserMedia({
                                     audio: { deviceId: selectedAudioValue },
                                     video: { deviceId: selectedVideoValue }
                                 }).then(function (stream) {
+                                    console.log("getUserMedia success", stream);
                                     _audioTrack = stream.getAudioTracks()[0];
                                     _videoTrack = stream.getVideoTracks()[0];
                                     _mediaStream = stream;
@@ -113,16 +120,32 @@ RB.WebRtc = (function (connectionManager) {
                 _camClose = function () {
                     console.info("UI: Cam Close(" + _user().getUsername() + ")");
                     document.getElementById("camClose").onclick = function () {
-                        _videoTrack.enabled = false;
+                        console.log("camClose button clicked");
+                        if (_videoTrack) {
+                            _videoTrack.enabled = false;
+                            console.log("Video track disabled");
+                        } else {
+                            console.log("No video track to disable");
+                        }
                     }
                 },
                 _mute = function () {
                     console.info("UI: Mute(" + _user().getUsername() + ")");
                     document.getElementById("mute").onclick = function () {
-                        if (_audioTrack == null) return;
+                        console.log("mute button clicked");
+                        if (_audioTrack == null) {
+                            console.log("No audio track to mute/unmute");
+                            return;
+                        }
                         _audioTrack.enabled = !_audioTrack.enabled;
-                        if (_audioTrack.enabled) document.getElementById("mute").innerText = "Mute";
-                        else document.getElementById("mute").innerText = "Unmute";
+                        if (_audioTrack.enabled) {
+                            document.getElementById("mute").innerText = "Mute";
+                            console.log("Audio unmuted");
+                        }
+                        else {
+                            document.getElementById("mute").innerText = "Unmute";
+                            console.log("Audio muted");
+                        }
                     };
                 }
             return {
@@ -138,15 +161,16 @@ RB.WebRtc = (function (connectionManager) {
                 },
                 _onReadyForStream = function (connection) {
                     console.info("STREAM: onReadyForStream(" + _user().getUsername + ")");
-
                     // The connection manager needs our stream
                     // todo: not sure I like this
 
                     if (_mediaStream == undefined || _mediaStream == null) {
+                        console.log("No media stream available for onReadyForStream");
                         hub.server.sendError(_user().getHubId(), "Karşı taraf kameranızı açmanızı bekliyor.");
                         return;
                     }
 
+                    console.log("Adding local media stream to connection");
                     connection.addStream(_mediaStream);
                 },
                 _onStreamAdded = function (connection, event) {
@@ -158,6 +182,7 @@ RB.WebRtc = (function (connectionManager) {
 
                         // Assign to RB.WebRtc for external access
                         RB.WebRtc.remoteStream = event.stream;
+                        console.log("Remote stream set on cam2 and RB.WebRtc.remoteStream");
                     }
                 },
                 _onStreamRemoved = function (connection, streamId) {
@@ -165,6 +190,7 @@ RB.WebRtc = (function (connectionManager) {
                     // todo: proper stream removal.  right now we are only set up for one-on-one which is why this works.
                     for (var i = 0; i < _cameras.length; i++) {
                         if (_cameras[i].id === streamId) {
+                            console.log("Removing stream with id:", streamId);
                             $("#cam" + (i + 1)).on("srcObject", null);
                             _cameras.splice(i, 1);
                             i--;
