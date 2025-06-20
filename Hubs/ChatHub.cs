@@ -32,7 +32,7 @@ public class ChatHub : Hub
 
     public async Task SaveTranscript(int userId, string transcript)
     {
-        using (var db = new GoruntuluGorusmeEntities()) // senin DbContext adýnla deðiþtir
+        using (var db = new GoruntuluGorusmeEntities()) 
         {
             var log = new CHAT_LOG
             {
@@ -57,5 +57,20 @@ public class ChatHub : Hub
         return Task.CompletedTask;
     }
 
-    // Diðer mevcut metodlarýn (videoCallRequest vb.) olduðu yer
+    // Görüntülü görüþme isteði gönderen SignalR metodu
+    public void sendVideoCallRequest(int receiverUserId, int senderUserId)
+    {
+        string senderName = "Çaðrý Yapan"; 
+        Clients.User(receiverUserId.ToString()).sendVideoCallRequestByReceiver(receiverUserId, senderUserId, senderName);
+
+        GoruntuluGorusmeEntities db = new GoruntuluGorusmeEntities();
+        int SID = senderUserId;
+        ACCOUNT acc = db.ACCOUNT.Where(p => p.USER_ID == SID).FirstOrDefault();
+        string RECEIVER_NAME = acc == null ? "" : acc.NAME_SURNAME;
+        Clients.Others.sendVideoCallRequestByReceiver(receiverUserId, senderUserId, RECEIVER_NAME);
+
+        // Debug için log ekle
+        System.Diagnostics.Debug.WriteLine($"sendVideoCallRequest: {senderUserId} -> {receiverUserId}");
+    }
+
 }

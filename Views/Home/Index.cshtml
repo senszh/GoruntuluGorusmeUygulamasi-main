@@ -26,7 +26,8 @@
                     <div class="action_menu">
                         <ul>
                             <li><i class="fas fa-user-circle"></i> Profil Resmi Değiştir</li>
-                            <li><i class="fas fa-key"></i> Şifreni Değiştir</li>
+                            <li><i class="fas fa-key"></i> Şifreni Değiştir</li>                            
+                            <li><a href="/ChatLog/Index"><i class="fas fa-file-alt"></i> Konuşma Kayıtlarım</a></li>
                         </ul>
                     </div>
                 </div>
@@ -41,5 +42,6 @@
         @{
             Html.RenderAction("MessageDetailPartial", "Home", new { USER = USER });
         }
+
     </div>
 </div>

@@ -82,5 +82,24 @@ namespace GoruntuluGorusmeBitirme.Hubs
         {
             Clients.Client(HUB_ID).sendError(message);
         }
+
+        public void saveTranscript(string userId, string reciveUserId, string transcript)
+        {
+            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(reciveUserId))
+                using (var db = new GoruntuluGorusmeEntities())
+                {
+                    var log = new CHAT_LOG
+                    {
+                        SENDER_ID = int.Parse(userId),
+                        RECEIVER_ID = int.Parse(reciveUserId),
+                        MESSAGE_CONTENT = transcript,
+                        SENT_TIME = DateTime.Now
+                    };
+                    db.CHAT_LOG.Add(log);
+                    db.SaveChanges();
+                }
+
+                Clients.Caller.transcriptSaved();
+            } 
     }
 }

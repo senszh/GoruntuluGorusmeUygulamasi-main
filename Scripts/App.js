@@ -385,9 +385,9 @@ RB.WebRtc = (function (connectionManager) {
             return _hub().getHub();
         }
     
-    // Expose localStream and remoteStream for external access
-    RB.WebRtc.localStream = null;
-    RB.WebRtc.remoteStream = null;
+    //// Expose localStream and remoteStream for external access
+    //RB.WebRtc.localStream = null;
+    //RB.WebRtc.remoteStream = null;
 
     return {
         initialize: _initialize, // Starts the UI process

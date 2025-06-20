@@ -31,7 +31,9 @@ namespace GoruntuluGorusmeBitirme.Controllers
         }
         public ActionResult MessageDetailPartial(ACCOUNT USER)
         {
+            if (USER == null) return new EmptyResult(); // kontrol eklendi
             ACCOUNT LOGIN_USER = (ACCOUNT)Session["LOGIN_USER"];
+            if (LOGIN_USER == null) return RedirectToAction("Index", "Auth");
             List<MESSAGE> msgList = db.MESSAGE.Where(p => (p.ACCOUNT.USER_ID == USER.USER_ID && p.ACCOUNT1.USER_ID == LOGIN_USER.USER_ID) || (p.ACCOUNT1.USER_ID == USER.USER_ID && p.ACCOUNT.USER_ID == LOGIN_USER.USER_ID)).ToList();
             ViewBag.USER = USER;
             return PartialView(msgList);
